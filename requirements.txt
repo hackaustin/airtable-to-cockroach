@@ -1,0 +1,4 @@
+arrow
+pyairtable
+prisma
+python-dotenv
