@@ -1,0 +1,56 @@
+generator client {
+  provider             = "prisma-client-py"
+  interface            = "asyncio"
+  recursive_type_depth = 5
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Ship {
+  id       BigInt        @id @default(autoincrement())
+  votes    Int           @default(0)
+  imageUrl String?
+  link     String?
+  title    String
+  authors  Participant[] 
+}
+
+model Prompt {
+  id          BigInt      @id @default(autoincrement())
+  authorEmail String
+  prompt      String
+  votes       Int         @default(0)
+  author      Participant? @relation(fields: [authorEmail], references: [email], onDelete: Cascade)
+}
+
+model Participant {
+  id                  BigInt         @id @default(autoincrement())
+  email               String         @unique
+  name                String
+  pronouns            String?
+  dob                 DateTime
+  dietaryRestrictions String?
+  technicalSkill      technicalSkill
+  tShirtSize          tShirtSize
+  workshop            Boolean
+  vaccineStatus       Boolean
+  prompts             Prompt[]
+  ships               Ship[]
+}
+
+enum technicalSkill {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum tShirtSize {
+  AXS
+  AS
+  AM
+  AL
+  AXL
+}
